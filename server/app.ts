@@ -26,6 +26,16 @@ export function createApp() {
         next();
     });
 
+    app.get("/api/health", (req, res) => {
+        res.json({
+            status: "ok",
+            timestamp: new Date().toISOString(),
+            environment: process.env.NODE_ENV || "development",
+            version: "1.0.0",
+            uptime: process.uptime(),
+        });
+    });
+
     // API routes
     app.use("/api", apiRouter);
 

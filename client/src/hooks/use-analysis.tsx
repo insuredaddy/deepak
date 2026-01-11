@@ -9,7 +9,9 @@ interface AnalysisContextType {
   analyze: (file: File) => Promise<AnalysisResponse>;
 }
 
-const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
+const AnalysisContext = createContext<AnalysisContextType | undefined>(
+  undefined
+);
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AnalysisState>({
@@ -18,7 +20,9 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     lastUpdated: null,
     error: null,
   });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [error, setError] = useState<string | null>(null);
 
   const analyze = async (file: File): Promise<AnalysisResponse> => {
@@ -87,7 +91,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       const jsonString = JSON.stringify(data);
       console.log("   - JSON length:", jsonString.length);
       sessionStorage.setItem("ensured_report", jsonString);
-      
+
       // Verify storage
       const verify = sessionStorage.getItem("ensured_report");
       if (verify) {
@@ -108,16 +112,22 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       if (err.stack) {
         console.error("   - Stack:", err.stack);
       }
-      
+
       // Provide more helpful error messages
-      let errorMessage = err.message || "Analysis failed - check console for details";
-      
+      let errorMessage =
+        err.message || "Analysis failed - check console for details";
+
       if (err.name === "TypeError" && err.message === "Failed to fetch") {
-        errorMessage = "Cannot connect to backend server. Please make sure the backend is running on port 5000. Run 'npm run dev' in a separate terminal.";
-      } else if (err.message.includes("ERR_CONNECTION_RESET") || err.message.includes("ECONNREFUSED")) {
-        errorMessage = "Backend server is not running. Please start it with 'npm run dev' in a separate terminal.";
+        errorMessage =
+          "Cannot connect to backend server. Please make sure the backend is running on port 8080. Run 'npm run dev' in a separate terminal.";
+      } else if (
+        err.message.includes("ERR_CONNECTION_RESET") ||
+        err.message.includes("ECONNREFUSED")
+      ) {
+        errorMessage =
+          "Backend server is not running. Please start it with 'npm run dev' in a separate terminal.";
       }
-      
+
       setError(errorMessage);
       setState((prev: AnalysisState) => ({ ...prev, error: errorMessage }));
       setStatus("error");
