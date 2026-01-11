@@ -265,6 +265,7 @@ export interface EvidenceBasedField {
 }
 
 export interface RawPolicyExtraction {
+  basic_info: any;
   policy_metadata: {
     insurer: string;
     policy_name: string;
@@ -273,6 +274,7 @@ export interface RawPolicyExtraction {
     extraction_confidence: number;
   };
   coverage: {
+    base_si: any;
     sum_insured: EvidenceBasedField;
     annual_premium?: EvidenceBasedField; // Optional - may not be in document
     room_rent: EvidenceBasedField;
