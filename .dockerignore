@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.env.local
+.env.development
+*.log
+npm-debug.log*
+.DS_Store
+.vscode
+.idea
+coverage
+.next
+uploads/*
+!uploads/.gitkeep

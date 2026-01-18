@@ -1,0 +1,58 @@
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { config } from "./config";
+import { apiRouter } from "./routes";
+import { errorHandler } from "./middleware/error.middleware";
+
+export function createApp() {
+    const app = express();
+
+    // CORS
+    app.use(cors(config.cors));
+
+    // Body parsing
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+
+    // Request logging
+    app.use((req, res, next) => {
+        const start = Date.now();
+        res.on("finish", () => {
+            if (req.path.startsWith("/api")) {
+                const ms = Date.now() - start;
+                console.log(`${req.method} ${req.path} ${res.statusCode} ${ms}ms`);
+            }
+        });
+        next();
+    });
+
+    app.get("/api/health", (req, res) => {
+        res.json({
+            status: "ok",
+            timestamp: new Date().toISOString(),
+            environment: process.env.NODE_ENV || "development",
+            version: "1.0.0",
+            uptime: process.uptime(),
+        });
+    });
+
+    // API routes
+    app.use("/api", apiRouter);
+
+    // 👉 Serve frontend in production
+    if (process.env.NODE_ENV === "production") {
+        const publicPath = path.join(process.cwd(), "dist", "public");
+
+        app.use(express.static(publicPath));
+
+        // SPA fallback (Express 5 safe)
+        app.use((req, res) => {
+            res.sendFile(path.join(publicPath, "index.html"));
+        });
+    }
+    // Error handling
+    app.use(errorHandler);
+
+    return app;
+}
