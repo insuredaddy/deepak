@@ -14,9 +14,10 @@
     "preview": "npm run build && npm start",
     "check": "tsc --noEmit",
     "docker:compose-build": "docker compose --env-file .env.production up --build",
-    "docker:build": "docker build -t policy-analyzer .",
-    "docker:run": "docker run -p 8080:8080 --env-file .env.production policy-analyzer",
-    "docker:push": "docker tag policy-analyzer registry.digitalocean.com/YOUR_REGISTRY/policy-analyzer:latest && docker push registry.digitalocean.com/YOUR_REGISTRY/policy-analyzer:latest",
+    "docker:build-apple": "docker build -t policy-analyzer:arm .",
+    "docker:run-apple": "docker run -p 8080:8080 policy-analyzer:arm",
+    "docker:build-prod": "docker buildx build --platform linux/amd64 -t policy-analyzer .",
+    "docker:push-prod": "docker tag policy-analyzer registry.digitalocean.com/ensured-app/app:latest && docker push registry.digitalocean.com/ensured-app/app:latest",
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
