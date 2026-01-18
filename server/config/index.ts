@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
 export const config = {
     port: Number(process.env.PORT) || 8080,
