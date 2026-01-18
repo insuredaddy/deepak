@@ -6,7 +6,7 @@ async function start() {
     const app = createApp();
     const server = createServer(app);
 
-    server.listen(config.port, "127.0.0.1", () => {
+    server.listen(config.port, "0.0.0.0", () => {
         console.log(`🚀 Server running on http://localhost:${config.port}`);
         console.log(`📝 Environment: ${config.nodeEnv}`);
         console.log(`🤖 AI Provider: ${config.ai.provider}`);

@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import { config } from "./config";
 import { apiRouter } from "./routes";
 import { errorHandler } from "./middleware/error.middleware";
@@ -39,6 +40,17 @@ export function createApp() {
     // API routes
     app.use("/api", apiRouter);
 
+    // 👉 Serve frontend in production
+    if (process.env.NODE_ENV === "production") {
+        const publicPath = path.join(process.cwd(), "dist", "public");
+
+        app.use(express.static(publicPath));
+
+        // SPA fallback (Express 5 safe)
+        app.use((req, res) => {
+            res.sendFile(path.join(publicPath, "index.html"));
+        });
+    }
     // Error handling
     app.use(errorHandler);
 
